@@ -55,15 +55,12 @@ public abstract class Command extends ListenerAdapter {
      */
     public void sendReply(MessageReceivedEvent e, String msg) {
         if (e.isFromType(ChannelType.PRIVATE)) {
-            PrivateChannel pm = e.getAuthor().openPrivateChannel().complete();
-            pm.sendMessage(new MessageBuilder()
+            Queue<Message> toSend = new MessageBuilder()
                     .append(msg)
-                    .build()).queue();
+                    .buildAll(MessageBuilder.SplitPolicy.ANYWHERE);
+            toSend.forEach(message -> e.getPrivateChannel().sendMessage(msg).queue());
         }
         else if (e.isFromType(ChannelType.TEXT)) {
-            /*e.getTextChannel().sendMessage(new MessageBuilder()
-                    .append(msg)
-                    .buildAll());*/
             Queue<Message> toSend = new MessageBuilder()
                     .append(msg)
                     .buildAll(MessageBuilder.SplitPolicy.ANYWHERE);
