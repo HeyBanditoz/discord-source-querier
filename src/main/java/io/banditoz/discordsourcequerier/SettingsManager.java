@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 
 // Thanks https://github.com/DV8FromTheWorld/Yui/blob/e8da929a8f637591e4da53599c39c8161be38746/src/net/dv8tion/discord/SettingsManager.java
 public class SettingsManager {
@@ -66,7 +67,11 @@ public class SettingsManager {
 
     private Settings getDefaultSettings() {
         Settings newSettings = new Settings();
+        HashMap<String, String> hm = new HashMap<>();
+        hm.put("server1","192.168.0.1");
+        hm.put("server2", "192.168.0.2:27015");
         newSettings.setBotToken("");
+        newSettings.setServerAliases(hm);
         return newSettings;
     }
 }

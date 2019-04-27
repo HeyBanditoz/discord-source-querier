@@ -3,6 +3,8 @@ package io.banditoz.discordsourcequerier.querier;
 import com.github.koraktor.steamcondenser.exceptions.SteamCondenserException;
 import com.github.koraktor.steamcondenser.steam.SteamPlayer;
 import com.github.koraktor.steamcondenser.steam.servers.SourceServer;
+import io.banditoz.discordsourcequerier.Settings;
+import io.banditoz.discordsourcequerier.SettingsManager;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
@@ -11,15 +13,38 @@ import java.util.concurrent.TimeoutException;
 public class SourceQuerier extends Querier {
     private SourceServer server;
 
+    // TODO: Clean this shit up.
     public SourceQuerier(String address) throws SteamCondenserException {
-        ipAndPort = address.split(":");
-        if (1 >= ipAndPort.length) {
-            ip = ipAndPort[0];
-            port = 27015; // default
+        Settings settings = SettingsManager.getInstance().getSettings();
+        HashMap<String, String> serverAliases = settings.getServerAliases();
+        boolean aliasFound = false;
+
+        // check all of the keys in the server aliases against the given string
+        for (String key : serverAliases.keySet()) {
+            if (key.compareToIgnoreCase(address) == 0) {
+                String[] ipAndPort = {serverAliases.get(key)};
+                if (1 >= ipAndPort.length) {
+                    ip = ipAndPort[0];
+                    port = 27015; // default
+                } else {
+                    ip = ipAndPort[0];
+                    port = Integer.parseInt(ipAndPort[1]);
+                }
+                aliasFound = true;
+                break;
+            }
         }
-        else {
-            ip = ipAndPort[0];
-            port = Integer.parseInt(ipAndPort[1]);
+
+        // we didn't find an alias, interpret it as an address
+        if (!aliasFound) {
+            ipAndPort = address.split(":");
+            if (1 >= ipAndPort.length) {
+                ip = ipAndPort[0];
+                port = 27015; // default
+            } else {
+                ip = ipAndPort[0];
+                port = Integer.parseInt(ipAndPort[1]);
+            }
         }
         server = new SourceServer(ip, port);
     }
