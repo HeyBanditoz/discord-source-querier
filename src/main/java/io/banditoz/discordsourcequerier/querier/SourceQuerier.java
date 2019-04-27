@@ -43,8 +43,11 @@ public class SourceQuerier extends Querier {
         HashMap<String, Object> hm = server.getServerInfo();
         // this gets a little ugly!
         String response = "```";
-        response += hm.get("serverName") + "\nPlayers: ";
-        response += hm.get("numberOfPlayers") + "/" +
+        response += hm.get("serverName") +
+                " " +
+                server.getIpAddresses() +
+                "\nPlayers: " +
+                hm.get("numberOfPlayers") + "/" +
                 hm.get("maxPlayers") +
                 "\nGame: " +
                 hm.get("gameDir") +
