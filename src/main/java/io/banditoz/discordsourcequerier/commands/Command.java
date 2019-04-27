@@ -1,9 +1,7 @@
 package io.banditoz.discordsourcequerier.commands;
 
 import net.dv8tion.jda.core.MessageBuilder;
-import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
@@ -49,25 +47,15 @@ public abstract class Command extends ListenerAdapter {
     }
 
     /**
-     * Sends a reply, indifferent to whether it came from a channel or in a private message.
+     * Sends a reply.
      * @param e The MessageReceivedEvent to reply to.
      * @param msg The reply.
      */
     public void sendReply(MessageReceivedEvent e, String msg) {
-        if (e.isFromType(ChannelType.PRIVATE)) {
-            Queue<Message> toSend = new MessageBuilder()
-                    .append(msg)
-                    .buildAll(MessageBuilder.SplitPolicy.ANYWHERE);
-            toSend.forEach(message -> e.getPrivateChannel().sendMessage(msg).queue());
-        }
-        else if (e.isFromType(ChannelType.TEXT)) {
-            Queue<Message> toSend = new MessageBuilder()
-                    .append(msg)
-                    .buildAll(MessageBuilder.SplitPolicy.ANYWHERE);
-            toSend.forEach(message -> e.getTextChannel().sendMessage(msg).queue());
-
-
-        }
+        Queue<Message> toSend = new MessageBuilder()
+                .append(msg)
+                .buildAll(MessageBuilder.SplitPolicy.ANYWHERE);
+        toSend.forEach(message -> e.getChannel().sendMessage(msg).queue());
     }
 
     protected String[] commandArgs(String string) {
