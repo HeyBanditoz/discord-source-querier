@@ -19,19 +19,22 @@ public class SourceQuerier extends Querier {
         HashMap<String, String> serverAliases = settings.getServerAliases();
         boolean aliasFound = false;
 
-        // check all of the keys in the server aliases against the given string
-        for (String key : serverAliases.keySet()) {
-            if (key.compareToIgnoreCase(address) == 0) {
-                String[] ipAndPort = {serverAliases.get(key)};
-                if (1 >= ipAndPort.length) {
-                    ip = ipAndPort[0];
-                    port = 27015; // default
-                } else {
-                    ip = ipAndPort[0];
-                    port = Integer.parseInt(ipAndPort[1]);
+        // make sure we actually have server alias(es)
+        if (!(serverAliases == null)) {
+            // check all of the keys in the server aliases against the given string
+            for (String key : serverAliases.keySet()) {
+                if (key.compareToIgnoreCase(address) == 0) {
+                    String[] ipAndPort = {serverAliases.get(key)};
+                    if (1 >= ipAndPort.length) {
+                        ip = ipAndPort[0];
+                        port = 27015; // default
+                    } else {
+                        ip = ipAndPort[0];
+                        port = Integer.parseInt(ipAndPort[1]);
+                    }
+                    aliasFound = true;
+                    break;
                 }
-                aliasFound = true;
-                break;
             }
         }
 
