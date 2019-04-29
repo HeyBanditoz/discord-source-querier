@@ -5,6 +5,7 @@ Structure of the bot is heavily inspired on [Yui](https://github.com/DV8FromTheW
 ## Using libraries
 * [JDA](https://github.com/DV8FromTheWorld/JDA)
 * [Steam Condenser](https://github.com/koraktor/steam-condenser-java)
+* [Gson](https://github.com/google/gson)
 
 ## Commands
 * !status \<address\> Returns the server name, current number of players, max players, game, gamemode, and map.
