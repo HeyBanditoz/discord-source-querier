@@ -1,5 +1,6 @@
 package io.banditoz.discordsourcequerier;
 
+import io.banditoz.discordsourcequerier.commands.BashCommand;
 import io.banditoz.discordsourcequerier.commands.HelpCommand;
 import io.banditoz.discordsourcequerier.commands.PlayersCommand;
 import io.banditoz.discordsourcequerier.commands.StatusCommand;
@@ -24,6 +25,7 @@ public class DiscordSourceQuerier extends ListenerAdapter {
         jda.addEventListener(new StatusCommand());
         jda.addEventListener(new PlayersCommand());
         jda.addEventListener(new HelpCommand());
+        jda.addEventListener(new BashCommand());
     }
 
     @Override

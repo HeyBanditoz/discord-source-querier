@@ -41,7 +41,6 @@ public class SettingsManager {
         try {
             BufferedReader reader = Files.newBufferedReader(configFile, StandardCharsets.UTF_8);
             this.settings = gson.fromJson(reader, Settings.class);
-
             reader.close();
             System.out.println("SettingsManager: Settings loaded");
         } catch (IOException e) {
@@ -72,6 +71,7 @@ public class SettingsManager {
         hm.put("server2", "192.168.0.2:27015");
         newSettings.setBotToken("");
         newSettings.setServerAliases(hm);
+        newSettings.setBotOwners(new String[]{"id_goes_here"});
         return newSettings;
     }
 }
