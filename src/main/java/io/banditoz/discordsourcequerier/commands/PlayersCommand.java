@@ -16,7 +16,7 @@ public class PlayersCommand extends Command {
     public void onCommand(MessageReceivedEvent e, String[] commandArgs) {
         try {
             SourceQuerier server = new SourceQuerier(commandArgs[1]);
-            sendReply(e, server.getPlayers());
+            sendEmbedReply(e, server.getPlayers());
         }
         catch (Exception ex) {
             sendExceptionMessage(e, ex);

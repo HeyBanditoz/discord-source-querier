@@ -16,7 +16,7 @@ public class StatusCommand extends Command {
     public void onCommand(MessageReceivedEvent e, String[] commandArgs) {
         try {
             SourceQuerier server = new SourceQuerier(commandArgs[1]);
-            sendReply(e, server.getServerInfo());
+            sendEmbedReply(e, server.getServerInfo());
         }
         catch (Exception ex) {
             sendExceptionMessage(e, ex);

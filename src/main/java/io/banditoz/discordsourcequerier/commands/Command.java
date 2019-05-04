@@ -2,6 +2,7 @@ package io.banditoz.discordsourcequerier.commands;
 
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
@@ -56,6 +57,15 @@ public abstract class Command extends ListenerAdapter {
                 .append(msg)
                 .buildAll(MessageBuilder.SplitPolicy.ANYWHERE);
         toSend.forEach(message -> e.getChannel().sendMessage(msg).queue());
+    }
+
+    /**
+     * Sends an EmbedReply.
+     * @param e The MessageReceivedEvent to reply to.
+     * @param me The reply.
+     */
+    public void sendEmbedReply(MessageReceivedEvent e, MessageEmbed me) {
+        e.getChannel().sendMessage(me).queue();
     }
 
     protected String[] commandArgs(String string) {
