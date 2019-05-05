@@ -66,9 +66,12 @@ public class SourceQuerier extends Querier {
         player.sort(String.CASE_INSENSITIVE_ORDER);
         StringBuilder players = new StringBuilder();
         for (String s : player) {
-            players.append("- ");
-            players.append(s);
-            players.append("\n");
+            if (s.equals("")) {
+                players.append("<CONNECTING>\n");
+            }
+            else {
+                players.append("- ").append(s).append("\n");
+            }
         }
         EmbedBuilder eb = new EmbedBuilder()
                 .setAuthor((String) serverStatus.get("serverName"))
