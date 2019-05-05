@@ -6,14 +6,18 @@ import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.TimeoutException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class Command extends ListenerAdapter {
     protected abstract void onCommand(MessageReceivedEvent e, String[] commandArgs) throws TimeoutException;
     public abstract List<String> getAliases();
     protected final boolean SEND_FULL_STACK_TRACE = false;
+    protected static final String regex = "\\S+";
 
     @Override
     public void onMessageReceived(MessageReceivedEvent e) {
@@ -69,7 +73,12 @@ public abstract class Command extends ListenerAdapter {
     }
 
     protected String[] commandArgs(String string) {
-        return string.split(" ");
+        List<String> matches = new ArrayList<>();
+        Matcher matcher = Pattern.compile(regex).matcher(string);
+        while (matcher.find()) {
+            matches.add(matcher.group());
+        }
+        return matches.toArray(new String[0]);
     }
 
     protected String[] commandArgs(Message message) {
