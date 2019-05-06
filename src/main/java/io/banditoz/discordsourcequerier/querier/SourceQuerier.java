@@ -67,13 +67,11 @@ public class SourceQuerier extends Querier {
         server.updatePlayers();
         HashMap<String, Object> serverStatus = server.getServerInfo();
         List<String> players = new ArrayList<>(server.getPlayers().keySet());
-        if(players.isEmpty()) {
-            
-        }
         Paginator.Builder pb;
         players.sort(String.CASE_INSENSITIVE_ORDER);
+        String text = (String) serverStatus.get("serverName");
         pb = new Paginator.Builder()
-                .setText((String) serverStatus.get("serverName"))
+                .setText(text + "\nPlayers: " + getFormattedPlayerCount())
                 .setColumns(1)
                 .setItemsPerPage(20)
                 .useNumberedItems(false)
