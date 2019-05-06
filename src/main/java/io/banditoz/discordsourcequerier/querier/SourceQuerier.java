@@ -2,15 +2,19 @@ package io.banditoz.discordsourcequerier.querier;
 
 import com.github.koraktor.steamcondenser.exceptions.SteamCondenserException;
 import com.github.koraktor.steamcondenser.steam.servers.SourceServer;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import io.banditoz.discordsourcequerier.DiscordSourceQuerier;
 import io.banditoz.discordsourcequerier.Settings;
 import io.banditoz.discordsourcequerier.SettingsManager;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
+import com.jagrosh.jdautilities.menu.Paginator;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 // TODO: Split getPlayers() and getServerInfo() into their own classes.
@@ -59,26 +63,25 @@ public class SourceQuerier extends Querier {
     }
 
     @Override
-    public MessageEmbed getPlayers() throws TimeoutException, SteamCondenserException {
+    public Paginator.Builder getPlayers() throws TimeoutException, SteamCondenserException {
         server.updatePlayers();
         HashMap<String, Object> serverStatus = server.getServerInfo();
-        List<String> player = new ArrayList<>(server.getPlayers().keySet());
-        player.sort(String.CASE_INSENSITIVE_ORDER);
-        StringBuilder players = new StringBuilder();
-        for (String s : player) {
-            if (s.equals("")) {
-                players.append("<CONNECTING>\n");
-            }
-            else {
-                players.append("- ").append(s).append("\n");
-            }
+        List<String> players = new ArrayList<>(server.getPlayers().keySet());
+        if(players.isEmpty()) {
+            
         }
-        EmbedBuilder eb = new EmbedBuilder()
-                .setAuthor((String) serverStatus.get("serverName"))
+        Paginator.Builder pb;
+        players.sort(String.CASE_INSENSITIVE_ORDER);
+        pb = new Paginator.Builder()
+                .setText((String) serverStatus.get("serverName"))
+                .setColumns(1)
+                .setItemsPerPage(20)
+                .useNumberedItems(false)
                 .setColor(EMBED_COLOR)
-                .addField("Players " + getFormattedPlayerCount(), players.toString(), true);
-
-        return eb.build();
+                .setItems(players.toArray(new String[0]))
+                .setEventWaiter(DiscordSourceQuerier.getWaiter())
+                .setTimeout(1, TimeUnit.MINUTES);
+        return pb;
     }
 
     @Override

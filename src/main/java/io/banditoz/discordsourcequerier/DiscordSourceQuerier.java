@@ -1,5 +1,6 @@
 package io.banditoz.discordsourcequerier;
 
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import io.banditoz.discordsourcequerier.commands.BashCommand;
 import io.banditoz.discordsourcequerier.commands.HelpCommand;
 import io.banditoz.discordsourcequerier.commands.PlayersCommand;
@@ -13,11 +14,13 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import javax.security.auth.login.LoginException;
 
 public class DiscordSourceQuerier extends ListenerAdapter {
+    private static EventWaiter waiter;
     public static void main(String[] args) throws LoginException, InterruptedException {
         setupBot();
     }
 
     private static void setupBot() throws LoginException, InterruptedException {
+        waiter = new EventWaiter();
         Settings settings = SettingsManager.getInstance().getSettings();
         JDA jda = new JDABuilder(settings.getBotToken()).build();
         jda.awaitReady();
@@ -26,6 +29,7 @@ public class DiscordSourceQuerier extends ListenerAdapter {
         jda.addEventListener(new PlayersCommand());
         jda.addEventListener(new HelpCommand());
         jda.addEventListener(new BashCommand());
+        jda.addEventListener(waiter = new EventWaiter());
     }
 
     @Override
@@ -35,5 +39,9 @@ public class DiscordSourceQuerier extends ListenerAdapter {
                     event.getMessage().getContentDisplay());
 
         }
+    }
+
+    public static EventWaiter getWaiter() {
+        return waiter;
     }
 }
