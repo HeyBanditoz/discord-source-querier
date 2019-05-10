@@ -1,7 +1,6 @@
 package io.banditoz.discordsourcequerier.commands;
 
 import io.banditoz.discordsourcequerier.commands.permissions.CommandPermissions;
-import io.banditoz.discordsourcequerier.commands.permissions.InsufficientPermissionsException;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.concurrent.TimeoutException;
@@ -11,9 +10,13 @@ public abstract class ElevatedCommand extends Command {
     public void onMessageReceived(MessageReceivedEvent e) {
         if (containsCommand(e.getMessage())) {
             try {
-                CommandPermissions.isBotOwner(e.getAuthor());
-                onCommand(e, commandArgs(e.getMessage()));
-            } catch (TimeoutException | InsufficientPermissionsException ex) {
+                if (CommandPermissions.isBotOwner(e.getAuthor())) {
+                    onCommand(e, commandArgs(e.getMessage()));
+                }
+                else {
+                    sendReply(e, String.format("User %s (ID: %s) does not have permission to run this command!", e.getAuthor().getAsTag(), e.getAuthor().getId()));
+                }
+            } catch (TimeoutException ex) {
                 sendExceptionMessage(e, ex);
             }
         }

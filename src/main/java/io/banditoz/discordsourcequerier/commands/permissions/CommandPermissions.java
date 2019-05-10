@@ -5,20 +5,14 @@ import io.banditoz.discordsourcequerier.SettingsManager;
 import net.dv8tion.jda.core.entities.User;
 
 public class CommandPermissions {
-    public static void isBotOwner(User attempter) throws InsufficientPermissionsException {
+    public static boolean isBotOwner(User attempter){
         Settings settings = SettingsManager.getInstance().getSettings();
         String[] botOwners = settings.getBotOwners();
-        String botOwner;
-        boolean found = false;
         for (String owner : botOwners) {
-            botOwner = owner;
-            if (botOwner.compareTo(attempter.getId()) == 0) {
-                found = true;
-                break;
+            if (owner.compareTo(attempter.getId()) == 0) {
+                return true;
             }
         }
-        if (!found) {
-            throw new InsufficientPermissionsException(attempter);
-        }
+        return false;
     }
 }
