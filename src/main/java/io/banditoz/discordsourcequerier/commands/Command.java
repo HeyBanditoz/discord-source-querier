@@ -22,6 +22,7 @@ public abstract class Command extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent e) {
         if (containsCommand(e.getMessage())) {
             try {
+                e.getChannel().sendTyping().queue();
                 onCommand(e, commandArgs(e.getMessage()));
             } catch (Exception ex) {
                 ex.printStackTrace();

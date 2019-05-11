@@ -9,6 +9,7 @@ public abstract class ElevatedCommand extends Command {
         if (containsCommand(e.getMessage())) {
             try {
                 if (CommandPermissions.isBotOwner(e.getAuthor())) {
+                    e.getChannel().sendTyping().queue();
                     onCommand(e, commandArgs(e.getMessage()));
                 }
                 else {
