@@ -2,7 +2,6 @@ package io.banditoz.discordsourcequerier.querier;
 
 import com.github.koraktor.steamcondenser.exceptions.SteamCondenserException;
 import com.github.koraktor.steamcondenser.steam.servers.SourceServer;
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import io.banditoz.discordsourcequerier.DiscordSourceQuerier;
 import io.banditoz.discordsourcequerier.Settings;
 import io.banditoz.discordsourcequerier.SettingsManager;
@@ -10,7 +9,7 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import com.jagrosh.jdautilities.menu.Paginator;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,44 +21,23 @@ public class SourceQuerier extends Querier {
     private SourceServer server;
     private final Color EMBED_COLOR;
 
-    // TODO: Clean this shit up.
-    public SourceQuerier(String address) throws SteamCondenserException {
+    public SourceQuerier(String givenAddress) throws SteamCondenserException {
         Settings settings = SettingsManager.getInstance().getSettings();
         HashMap<String, String> serverAliases = settings.getServerAliases();
-        boolean aliasFound = false;
         EMBED_COLOR = new Color(109, 255, 59);
 
         // make sure we actually have server alias(es)
         if (!(serverAliases == null)) {
             // check all of the keys in the server aliases against the given string
             for (String key : serverAliases.keySet()) {
-                if (key.compareToIgnoreCase(address) == 0) {
-                    String[] ipAndPort = {serverAliases.get(key)};
-                    if (1 >= ipAndPort.length) {
-                        ip = ipAndPort[0];
-                        port = 27015; // default
-                    } else {
-                        ip = ipAndPort[0];
-                        port = Integer.parseInt(ipAndPort[1]);
-                    }
-                    aliasFound = true;
+                if (key.compareToIgnoreCase(givenAddress) == 0) {
+                    ip = serverAliases.get(key);
                     break;
                 }
+                ip = givenAddress;
             }
         }
-
-        // we didn't find an alias, interpret it as an address
-        if (!aliasFound) {
-            ipAndPort = address.split(":");
-            if (1 >= ipAndPort.length) {
-                ip = ipAndPort[0];
-                port = 27015; // default
-            } else {
-                ip = ipAndPort[0];
-                port = Integer.parseInt(ipAndPort[1]);
-            }
-        }
-        server = new SourceServer(ip, port);
+        server = new SourceServer(ip);
     }
 
     @Override

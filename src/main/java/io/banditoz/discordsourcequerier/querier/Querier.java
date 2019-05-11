@@ -6,10 +6,9 @@ import net.dv8tion.jda.core.entities.MessageEmbed;
 
 import java.util.concurrent.TimeoutException;
 
+@SuppressWarnings("unused")
 public abstract class Querier {
     protected String ip;
-    protected int port;
-    protected String[] ipAndPort;
 
     public abstract Paginator.Builder getPlayers() throws TimeoutException, SteamCondenserException;
     public abstract MessageEmbed getServerInfo() throws TimeoutException, SteamCondenserException;

@@ -24,7 +24,7 @@ public class BashCommand extends ElevatedCommand {
             Process p = new ProcessBuilder("bash", "-c", args.toString()).start();
             p.waitFor(); // hacky for right now, but this is dangerous! make sure your bash commands won't hang
             BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String line = "";
+            String line;
             StringBuilder output = new StringBuilder("```");
 
             while ((line = reader.readLine()) != null) {

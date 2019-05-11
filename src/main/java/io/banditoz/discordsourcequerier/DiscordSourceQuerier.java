@@ -1,10 +1,7 @@
 package io.banditoz.discordsourcequerier;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import io.banditoz.discordsourcequerier.commands.BashCommand;
-import io.banditoz.discordsourcequerier.commands.HelpCommand;
-import io.banditoz.discordsourcequerier.commands.PlayersCommand;
-import io.banditoz.discordsourcequerier.commands.StatusCommand;
+import io.banditoz.discordsourcequerier.commands.*;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.ChannelType;
@@ -29,6 +26,7 @@ public class DiscordSourceQuerier extends ListenerAdapter {
         jda.addEventListener(new PlayersCommand());
         jda.addEventListener(new HelpCommand());
         jda.addEventListener(new BashCommand());
+        jda.addEventListener(new ReloadSettingsCommand());
         jda.addEventListener(waiter = new EventWaiter());
     }
 

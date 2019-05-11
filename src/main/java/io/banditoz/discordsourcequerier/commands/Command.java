@@ -9,22 +9,21 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class Command extends ListenerAdapter {
-    protected abstract void onCommand(MessageReceivedEvent e, String[] commandArgs) throws TimeoutException;
+    protected abstract void onCommand(MessageReceivedEvent e, String[] commandArgs);
     public abstract List<String> getAliases();
     protected final boolean SEND_FULL_STACK_TRACE = false;
-    protected static final String regex = "\\S+";
+    protected static final String REGEX = "\\S+";
 
     @Override
     public void onMessageReceived(MessageReceivedEvent e) {
         if (containsCommand(e.getMessage())) {
             try {
                 onCommand(e, commandArgs(e.getMessage()));
-            } catch (TimeoutException ex) {
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
@@ -74,7 +73,7 @@ public abstract class Command extends ListenerAdapter {
 
     protected String[] commandArgs(String string) {
         List<String> matches = new ArrayList<>();
-        Matcher matcher = Pattern.compile(regex).matcher(string);
+        Matcher matcher = Pattern.compile(REGEX).matcher(string);
         while (matcher.find()) {
             matches.add(matcher.group());
         }
